@@ -1,4 +1,4 @@
-package net.slipp.user;
+package net.slipp.user.web;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -15,11 +15,17 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.slipp.support.MyValidatorFactory;
+import net.slipp.user.User;
+import net.slipp.user.UserDAO;
 
 @WebServlet("/users/create")
 public class CreateUserServlet extends HttpServlet {
+	private static final Logger logger =LoggerFactory.getLogger(CreateUserServlet.class);
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -29,6 +35,8 @@ public class CreateUserServlet extends HttpServlet {
 		} catch (IllegalAccessException | InvocationTargetException e1) {
 			throw new ServletException(e1);
 		}
+		
+		logger.debug(" CreateUserServlet Login 정보 {} , {}  : ", user.toString(), "user 정보");  
 		
 		Validator validator = MyValidatorFactory.createValidator();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
@@ -40,13 +48,10 @@ public class CreateUserServlet extends HttpServlet {
 		}
 		
 		UserDAO userDAO = new UserDAO();
-		try {
-			userDAO.addUser(user);
-		} catch (SQLException e) {
-		}
-		
+		userDAO.addUser(user);	
 		response.sendRedirect("/");
 	}
+	
 	
 	private void forwardJSP(HttpServletRequest request,
 			HttpServletResponse response, String errorMessage) throws ServletException, IOException {
@@ -54,4 +59,6 @@ public class CreateUserServlet extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/form.jsp");
 		rd.forward(request, response);
 	}
+	
+	
 }

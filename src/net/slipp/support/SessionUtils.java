@@ -1,4 +1,4 @@
-package net.slipp.user;
+package net.slipp.support;
 
 import javax.servlet.http.HttpSession;
 

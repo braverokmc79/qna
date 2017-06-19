@@ -45,3 +45,4 @@ public class UserTest {
 		User.login(TEST_USER.getUserId(), "password2");
 	}
 }
+

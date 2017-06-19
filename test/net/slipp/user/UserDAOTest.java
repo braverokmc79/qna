@@ -1,14 +1,21 @@
 package net.slipp.user;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import java.sql.Connection;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserDAOTest {
 
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserDAOTest.class);
+	
 	private UserDAO userDao;
 	
 	@Before
@@ -16,12 +23,6 @@ public class UserDAOTest {
 		userDao = new UserDAO();
 	}
 
-	@Test
-	public void connection() {
-		Connection con = userDao.getConnection();
-		assertNotNull(con);
-	}
-	
 	@Test
 	public void crud() throws Exception {
 		User user = UserTest.TEST_USER;
@@ -44,4 +45,15 @@ public class UserDAOTest {
 		assertNull(dbUser);
 	}
 
+	
+	//사용자 목록 조회
+	@Test
+	public void findUsers() throws Exception{
+		List<User> users=userDao.findUsers();
+		assertTrue(users.size() >0);
+		logger.debug(" findUsers , {} : "  , users);
+	}
+	
 }
+
+
